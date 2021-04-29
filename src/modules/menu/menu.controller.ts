@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { MenuService } from './menu.service';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+
+import { FindAllNamedQueryDto } from '../../common/dto/find-all-named-query.dto';
+import { IdParamDto } from '../../common/dto/id-param.dto';
+import { ListResultDto } from '../../common/dto/list-result.dto';
 import { CreateMenuDto } from './dto/create-menu.dto';
 import { UpdateMenuDto } from './dto/update-menu.dto';
+import { Menu } from './entities/menu.entity';
+import { MenuService } from './menu.service';
 
 @Controller('menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Post()
-  create(@Body() createMenuDto: CreateMenuDto) {
+  create(@Body() createMenuDto: CreateMenuDto): Promise<Menu> {
     return this.menuService.create(createMenuDto);
   }
 
   @Get()
-  findAll() {
-    return this.menuService.findAll();
+  findAll(@Query() query: FindAllNamedQueryDto): Promise<ListResultDto<Menu>> {
+    return this.menuService.findAll(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.menuService.findOne(+id);
+  findOne(@Param() idParamDto: IdParamDto): Promise<Menu> {
+    return this.menuService.findOne(idParamDto.id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMenuDto: UpdateMenuDto) {
-    return this.menuService.update(+id, updateMenuDto);
+  @Put(':id')
+  update(@Param() idParamDto: IdParamDto, @Body() updateMenuDto: UpdateMenuDto): Promise<Menu> {
+    return this.menuService.update(idParamDto.id, updateMenuDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.menuService.remove(+id);
+  remove(@Param() idParamDto: IdParamDto): Promise<number | undefined | null> {
+    return this.menuService.remove(idParamDto.id);
   }
 }

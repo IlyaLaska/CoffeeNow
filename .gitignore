@@ -32,11 +32,3 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-# local env files
-.env
-.env.local
-.env.*
-
-ormconfig.json
-src/coverage

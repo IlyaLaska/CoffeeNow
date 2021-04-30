@@ -1,34 +1,45 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { OrderService } from './order.service';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+
+import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
+import { IdParamDto } from '../../common/dto/id-param.dto';
+import { ListResultDto } from '../../common/dto/list-result.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { Order } from './entities/order.entity';
+import { OrderService } from './order.service';
 
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
+  create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return this.orderService.create(createOrderDto);
   }
 
   @Get()
-  findAll() {
-    return this.orderService.findAll();
+  findAll(@Query() query: FindAllQueryDto): Promise<ListResultDto<Order>> {
+    return this.orderService.findAll(query);
   }
 
+  @Get('/all')
+  findAllWithCompleted(@Query() query: FindAllQueryDto): Promise<ListResultDto<Order>> {
+    return this.orderService.findAllWithCompleted(query);
+  }
+
+  // TODO what to do with completed order security???
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+  findOne(@Param() idParamDto: IdParamDto): Promise<Order> {
+    return this.orderService.findOne(idParamDto.id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
+  @Put(':id')
+  update(@Param('id') idParamDto: IdParamDto, @Body() updateOrderDto: UpdateOrderDto): Promise<Order> {
+    return this.orderService.update(idParamDto.id, updateOrderDto);
   }
-
+  // TODO decide how to handle deletion
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(+id);
+  remove(@Param('id') idParamDto: IdParamDto): Promise<number | undefined | null> {
+    return this.orderService.remove(idParamDto.id);
   }
 }

@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import * as Redis from 'ioredis';
 
+import { AdminCredentials } from '../../types/AdminCredentials';
 // import { S3Config } from '../../constants';
 import { EnvVariables } from './env-variables.class';
 
@@ -31,6 +32,28 @@ export class ConfigService {
 
   get HOSTNAME(): string | undefined {
     return this.envVariables.HOSTNAME;
+  }
+
+  get FIREBASE_ADMIN_CREDENTIALS(): string {
+    return this.envVariables.FIREBASE_ADMIN_CREDENTIALS;
+  }
+
+  get FIREBASE_API_KEY(): string {
+    return this.envVariables.FIREBASE_API_KEY;
+  }
+
+  get adminCredentials(): AdminCredentials | null {
+    if (!this.envVariables.ADMIN_EMAIL || !this.envVariables.ADMIN_PASSWORD) {
+      return null;
+    }
+    return {
+      email: this.envVariables.ADMIN_EMAIL,
+      password: this.envVariables.ADMIN_PASSWORD,
+    };
+  }
+
+  get initEnabled(): boolean {
+    return !!this.envVariables.ADMIN_INIT_ENABLED;
   }
 
   get ormConfig(): TypeOrmModuleOptions {

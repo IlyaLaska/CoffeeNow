@@ -1,5 +1,17 @@
-import { Type } from 'class-transformer';
-import { IsBoolean, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, Length, Max, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDefined,
+  IsEmail,
+  IsIn,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class EnvVariables implements Readonly<EnvVariables> {
   @IsDefined()
@@ -50,6 +62,31 @@ export class EnvVariables implements Readonly<EnvVariables> {
   @IsOptional()
   @IsString()
   POSTGRES_CA_CERT?: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  FIREBASE_ADMIN_CREDENTIALS!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  FIREBASE_API_KEY!: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsEmail()
+  ADMIN_EMAIL?: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  ADMIN_PASSWORD?: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @Transform((val) => ['1', 1, 'true', true].includes(val.value))
+  @IsBoolean()
+  ADMIN_INIT_ENABLED?: boolean;
 
   @IsOptional()
   @IsString()

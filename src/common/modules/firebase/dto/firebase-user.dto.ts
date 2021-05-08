@@ -3,5 +3,5 @@ export class FirebaseUserDto {
   email?: string;
   password?: string;
   displayName?: string;
-  resourceKeys?: string[];
+  roleKeys?: string[];
 }

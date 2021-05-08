@@ -16,25 +16,25 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private resourceService: RoleService,
+    private roleService: RoleService,
     private firebaseService: FirebaseService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | void> {
     try {
       const id = uuid();
-      const resources = await this.resourceService.findByIds(createUserDto.roleIds);
-      const resourceUrls = resources.map((resource) => resource.key);
+      const roles = await this.roleService.findByIds(createUserDto.roleIds);
+      const roleUrls = roles.map((role) => role.key);
       await this.firebaseService.create({
         uid: id,
         email: createUserDto.email,
         displayName: createUserDto.name,
         password: createUserDto.password,
-        resourceKeys: resourceUrls,
+        roleKeys: roleUrls,
       });
       return this.userRepository.save<Partial<User>>({
         id,
-        resources,
+        roles,
         name: createUserDto.name,
         initialEmail: createUserDto.email,
       });
@@ -48,12 +48,12 @@ export class UserService {
   }
 
   async findAll(query: FindAllQueryDto): Promise<ListResultDto<User>> {
-    const [result, totalCount] = await this.userRepository.findAndCount({ ...query.toSQL(), relations: ['resources'] });
+    const [result, totalCount] = await this.userRepository.findAndCount({ ...query.toSQL(), relations: ['roles'] });
     return { result, totalCount };
   }
 
   async findOne(uuid: string): Promise<User> {
-    const user = await this.userRepository.findOne(uuid, { relations: ['resources'] });
+    const user = await this.userRepository.findOne(uuid, { relations: ['roles'] });
     if (!user) {
       throw new NotFoundException(`User with uuid ${uuid} not found`);
     }
@@ -61,15 +61,15 @@ export class UserService {
   }
 
   async update(uuid: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const ownedResourceKeys = (await this.findOne(uuid)).resources.map((resource) => {
-      return resource.key;
+    const ownedRoleKeys = (await this.findOne(uuid)).roles.map((role) => {
+      return role.key;
     });
-    const resources = updateUserDto.roleIds ? await this.resourceService.findByIds(updateUserDto.roleIds) : undefined;
-    const resourceKeys = resources ? resources.map((resource) => resource.key) : undefined;
+    const roles = updateUserDto.roleIds ? await this.roleService.findByIds(updateUserDto.roleIds) : undefined;
+    const roleKeys = roles ? roles.map((role) => role.key) : undefined;
     if (
-      resourceKeys &&
-      ownedResourceKeys.some((ownedKey) => {
-        return !resourceKeys.includes(ownedKey);
+      roleKeys &&
+      ownedRoleKeys.some((ownedKey) => {
+        return !roleKeys.includes(ownedKey);
       })
     ) {
       await this.firebaseService.revokeToken(uuid);
@@ -77,11 +77,11 @@ export class UserService {
     await this.firebaseService.update({
       uid: uuid,
       displayName: updateUserDto.name,
-      resourceKeys: resourceKeys,
+      roleKeys: roleKeys,
     });
     return this.userRepository.save<Partial<User>>({
       id: uuid,
-      resources,
+      roles,
       ...updateUserDto,
     });
   }

@@ -10,7 +10,7 @@ import { UserService } from '../user/user.service';
 @Injectable()
 export class InitService {
   constructor(
-    private resourceService: RoleService,
+    private roleService: RoleService,
     private userService: UserService,
     private configService: ConfigService,
   ) {}
@@ -20,13 +20,13 @@ export class InitService {
       return 'Endpoint disabled';
     }
     // TODO decide what to do
-    let admin = await this.resourceService.findByKey(RoleEnum.admin);
+    let admin = await this.roleService.findByKey(RoleEnum.admin);
     if (!admin) {
-      const createResourceDto: CreateRoleDto = {
+      const createRoleDto: CreateRoleDto = {
         name: 'Administrator',
         key: RoleEnum.admin,
       };
-      admin = await this.resourceService.create(createResourceDto);
+      admin = await this.roleService.create(createRoleDto);
     }
     const createUserDto: CreateUserDto = {
       name: 'Admin',

@@ -22,7 +22,7 @@ export class FirebaseService {
   async create(createFirebaseUserDto: FirebaseUserDto): Promise<void> {
     try {
       await admin.auth().createUser({ emailVerified: true, ...createFirebaseUserDto });
-      await admin.auth().setCustomUserClaims(createFirebaseUserDto.uid, { keys: createFirebaseUserDto.resourceKeys });
+      await admin.auth().setCustomUserClaims(createFirebaseUserDto.uid, { keys: createFirebaseUserDto.roleKeys });
     } catch (e) {
       throw new ConflictException(e.toString());
     }
@@ -31,8 +31,8 @@ export class FirebaseService {
   async update(updateFirebaseUserDto: FirebaseUserDto): Promise<void> {
     try {
       await admin.auth().updateUser(updateFirebaseUserDto.uid, { ...updateFirebaseUserDto });
-      if (updateFirebaseUserDto.resourceKeys) {
-        await admin.auth().setCustomUserClaims(updateFirebaseUserDto.uid, { keys: updateFirebaseUserDto.resourceKeys });
+      if (updateFirebaseUserDto.roleKeys) {
+        await admin.auth().setCustomUserClaims(updateFirebaseUserDto.uid, { keys: updateFirebaseUserDto.roleKeys });
       }
     } catch (e) {
       throw new ConflictException(e.toString());

@@ -22,9 +22,9 @@ export class User {
   @Column({ length: 256, nullable: true })
   initialEmail?: string;
 
-  @ManyToMany(() => Role, (resource) => resource.users, { cascade: true })
+  @ManyToMany(() => Role, (role) => role.users, { cascade: true })
   @JoinTable()
-  resources!: Role[];
+  roles!: Role[];
 
   @CreateDateColumn()
   createDate!: Date;

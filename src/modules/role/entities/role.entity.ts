@@ -21,7 +21,7 @@ export class Role {
   @Column({ nullable: false, update: false })
   key!: string;
 
-  @ManyToMany(() => User, (user) => user.resources)
+  @ManyToMany(() => User, (user) => user.roles)
   users!: User[];
 
   @CreateDateColumn()

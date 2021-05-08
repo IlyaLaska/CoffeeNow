@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
 import { FirebaseService } from '../../common/modules/firebase/firebase.service';
-import { ResourceService } from '../resource/resource.service';
+import { RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -16,14 +16,14 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private resourceService: ResourceService,
+    private resourceService: RoleService,
     private firebaseService: FirebaseService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | void> {
     try {
       const id = uuid();
-      const resources = await this.resourceService.findByIds(createUserDto.resourceIds);
+      const resources = await this.resourceService.findByIds(createUserDto.roleIds);
       const resourceUrls = resources.map((resource) => resource.key);
       await this.firebaseService.create({
         uid: id,
@@ -39,8 +39,11 @@ export class UserService {
         initialEmail: createUserDto.email,
       });
     } catch (e) {
-      if (e.response.statusCode === 409) throw new ConflictException(e.response.message);
-      else throw e;
+      if (e.response.statusCode === 409) {
+        throw new ConflictException(e.response.message);
+      } else {
+        throw e;
+      }
     }
   }
 
@@ -61,9 +64,7 @@ export class UserService {
     const ownedResourceKeys = (await this.findOne(uuid)).resources.map((resource) => {
       return resource.key;
     });
-    const resources = updateUserDto.resourceIds
-      ? await this.resourceService.findByIds(updateUserDto.resourceIds)
-      : undefined;
+    const resources = updateUserDto.roleIds ? await this.resourceService.findByIds(updateUserDto.roleIds) : undefined;
     const resourceKeys = resources ? resources.map((resource) => resource.key) : undefined;
     if (
       resourceKeys &&

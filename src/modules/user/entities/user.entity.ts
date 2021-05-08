@@ -9,7 +9,7 @@ import {
   VersionColumn,
 } from 'typeorm';
 
-import { Resource } from '../../resource/entities/resource.entity';
+import { Role } from '../../role/entities/role.entity';
 
 @Entity()
 export class User {
@@ -22,15 +22,15 @@ export class User {
   @Column({ length: 256, nullable: true })
   initialEmail?: string;
 
-  @ManyToMany(() => Resource, (resource) => resource.users, { cascade: true })
+  @ManyToMany(() => Role, (resource) => resource.users, { cascade: true })
   @JoinTable()
-  resources!: Resource[];
-
-  @UpdateDateColumn()
-  updateDate!: Date;
+  resources!: Role[];
 
   @CreateDateColumn()
   createDate!: Date;
+
+  @UpdateDateColumn()
+  updateDate!: Date;
 
   @VersionColumn({ default: 1 })
   version!: number;

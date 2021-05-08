@@ -1,4 +1,6 @@
-import { IsArray, IsDefined, IsEmail, IsInt, IsPositive, IsString, Length } from 'class-validator';
+import { IsArray, IsDefined, IsEmail, IsEnum, IsInt, IsPositive, IsString, Length } from 'class-validator';
+
+import { RoleEnum } from '../../role/enums/role.enum';
 
 export class CreateUserDto {
   @IsDefined()
@@ -19,5 +21,5 @@ export class CreateUserDto {
   @IsArray()
   @IsInt({ each: true })
   @IsPositive({ each: true })
-  resourceIds!: number[];
+  roleIds!: number[];
 }

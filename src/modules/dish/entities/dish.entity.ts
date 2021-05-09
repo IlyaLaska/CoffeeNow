@@ -23,7 +23,7 @@ export class Dish {
   @Column({ length: 4096, nullable: true })
   description?: string;
 
-  @Column({ default: 0 })
+  @Column({ default: 0, type: 'numeric', precision: 8, scale: 2 })
   price!: number;
 
   @Column({ length: 128 })

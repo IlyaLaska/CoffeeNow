@@ -43,10 +43,11 @@ export class DishService {
     // await this.dishRepository.update(id, updateDishDto);
     // return this.findOne(id);
     // TODO need partial?
-    return this.dishRepository.save<Partial<Dish>>({
+    await this.dishRepository.save({
       id,
       ...updateDishDto,
     });
+    return await this.findOne(id);
   }
 
   async remove(id: number): Promise<number | undefined | null> {

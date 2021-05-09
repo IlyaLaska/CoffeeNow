@@ -79,7 +79,7 @@ export class UserService {
       displayName: updateUserDto.name,
       roleKeys: roleKeys,
     });
-    return this.userRepository.save<Partial<User>>({
+    return this.userRepository.save({
       id: uuid,
       roles,
       ...updateUserDto,

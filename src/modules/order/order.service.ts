@@ -81,10 +81,11 @@ export class OrderService {
   }
 
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
-    return this.orderRepository.save<Partial<Order>>({
+    await this.orderRepository.save<Partial<Order>>({
       id,
       ...updateOrderDto,
     });
+    return await this.findOne(id);
   }
 
   async remove(id: number): Promise<number | undefined | null> {

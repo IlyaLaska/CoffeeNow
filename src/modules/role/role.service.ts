@@ -51,11 +51,11 @@ export class RoleService {
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto): Promise<Role> {
-    await this.findOne(id);
-    return this.roleRepository.save<Partial<Role>>({
+    await this.roleRepository.save({
       id,
       ...updateRoleDto,
     });
+    return await this.findOne(id);
   }
 
   async remove(id: number): Promise<number | undefined | null> {

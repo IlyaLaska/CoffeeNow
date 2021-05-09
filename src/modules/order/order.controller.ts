@@ -34,12 +34,12 @@ export class OrderController {
   }
 
   @Put(':id')
-  update(@Param('id') idParamDto: IdParamDto, @Body() updateOrderDto: UpdateOrderDto): Promise<Order> {
+  update(@Param() idParamDto: IdParamDto, @Body() updateOrderDto: UpdateOrderDto): Promise<Order> {
     return this.orderService.update(idParamDto.id, updateOrderDto);
   }
   // TODO decide how to handle deletion
   @Delete(':id')
-  remove(@Param('id') idParamDto: IdParamDto): Promise<number | undefined | null> {
+  remove(@Param() idParamDto: IdParamDto): Promise<number | undefined | null> {
     return this.orderService.remove(idParamDto.id);
   }
 }

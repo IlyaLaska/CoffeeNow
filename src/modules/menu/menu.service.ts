@@ -43,20 +43,20 @@ export class MenuService {
   }
 
   async update(id: number, updateMenuDto: UpdateMenuDto): Promise<Menu> {
-    // TODO need partial?
     if (updateMenuDto.dishIds) {
       const dishes = await this.dishService.findMany(updateMenuDto.dishIds);
-      return this.menuRepository.save<Partial<Menu>>({
+      await this.menuRepository.save({
         id,
         dishes: dishes,
         ...updateMenuDto,
       });
     } else {
-      return this.menuRepository.save<Partial<Menu>>({
+      await this.menuRepository.save({
         id,
         ...updateMenuDto,
       });
     }
+    return await this.findOne(id);
   }
 
   async remove(id: number): Promise<number | undefined | null> {

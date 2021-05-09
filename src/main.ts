@@ -1,4 +1,5 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 
@@ -19,6 +20,14 @@ async function interceptors(app: INestApplication): Promise<void> {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 }
 
+async function cors(app: INestApplication): Promise<void> {
+  const options: CorsOptions = {
+    origin: true,
+  };
+
+  app.enableCors(options);
+}
+
 async function listen(app: INestApplication): Promise<void> {
   const configService = app.get(ConfigService);
   if (configService.HOSTNAME) {
@@ -33,6 +42,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter);
   await pipes(app);
   await interceptors(app);
+  await cors(app);
   await listen(app);
 }
 

@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FirebaseGuard } from './common/guards/firebase-guard.service';
 import { ConfigModule } from './common/modules/config/config.module';
 import { ConfigService } from './common/modules/config/config.service';
+import { FirebaseModule } from './common/modules/firebase/firebase.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DishModule } from './modules/dish/dish.module';
 import { InitModule } from './modules/init/init.module';
@@ -34,8 +37,15 @@ import { UserModule } from './modules/user/user.module';
     InitModule,
     RoleModule,
     UserModule,
+    FirebaseModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: FirebaseGuard,
+    },
+  ],
 })
 export class AppModule {}

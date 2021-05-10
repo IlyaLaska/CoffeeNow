@@ -49,6 +49,7 @@ export class FirebaseGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const token = await this.getToken(request);
+    console.log(token);
     return true;
     // TODO Fix
     // return this.isAdmin(token.keys, this.configService.RESOURCE_ID);

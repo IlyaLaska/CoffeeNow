@@ -42,7 +42,6 @@ export class DishService {
   async update(id: number, updateDishDto: UpdateDishDto): Promise<Dish> {
     // await this.dishRepository.update(id, updateDishDto);
     // return this.findOne(id);
-    // TODO need partial?
     await this.dishRepository.save({
       id,
       ...updateDishDto,

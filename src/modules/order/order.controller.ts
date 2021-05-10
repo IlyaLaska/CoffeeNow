@@ -27,7 +27,6 @@ export class OrderController {
     return this.orderService.findAllWithCompleted(query);
   }
 
-  // TODO what to do with completed order security???
   @Get(':id')
   findOne(@Param() idParamDto: IdParamDto): Promise<Order> {
     return this.orderService.findOne(idParamDto.id);

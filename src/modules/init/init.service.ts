@@ -19,7 +19,6 @@ export class InitService {
     if (!this.configService.initEnabled || !this.configService.adminCredentials) {
       return 'Endpoint disabled';
     }
-    // TODO decide what to do
     let admin = await this.roleService.findByKey(RoleEnum.admin);
     if (!admin) {
       const createRoleDto: CreateRoleDto = {

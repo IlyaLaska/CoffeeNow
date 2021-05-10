@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
-import { FindAllNamedQueryDto } from '../../common/dto/find-all-named-query.dto';
 import { IdParamDto } from '../../common/dto/id-param.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
 import { DishService } from './dish.service';
 import { CreateDishDto } from './dto/create-dish.dto';
+import { FindAllDishQueryDto } from './dto/find-all-dish-query.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 
@@ -18,7 +18,7 @@ export class DishController {
   }
 
   @Get()
-  findAll(@Query() query: FindAllNamedQueryDto): Promise<ListResultDto<Dish>> {
+  findAll(@Query() query: FindAllDishQueryDto): Promise<ListResultDto<Dish>> {
     return this.dishService.findAll(query);
   }
 

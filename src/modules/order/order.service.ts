@@ -58,7 +58,7 @@ export class OrderService {
   async findAll(query: FindAllQueryDto): Promise<ListResultDto<Order>> {
     const [result, totalCount] = await this.orderRepository.findAndCount({
       where: { status: Not(OrderStatusEnum.completed) },
-      relations: ['orderToDish'],
+      relations: ['orderToDish', 'orderToDish.dish'],
       ...query.toSQL(),
     });
     return { result, totalCount };
@@ -66,7 +66,7 @@ export class OrderService {
 
   async findAllWithCompleted(query: FindAllQueryDto): Promise<ListResultDto<Order>> {
     const [result, totalCount] = await this.orderRepository.findAndCount({
-      relations: ['orderToDish'],
+      relations: ['orderToDish', 'orderToDish.dish'],
       ...query.toSQL(),
     });
     return { result, totalCount };

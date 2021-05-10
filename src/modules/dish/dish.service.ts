@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
-import { FindAllNamedQueryDto } from '../../common/dto/find-all-named-query.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
 import { CreateDishDto } from './dto/create-dish.dto';
+import { FindAllDishQueryDto } from './dto/find-all-dish-query.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
 import { Dish } from './entities/dish.entity';
 
@@ -18,7 +18,7 @@ export class DishService {
     return this.dishRepository.save(createDishDto);
   }
 
-  async findAll(query: FindAllNamedQueryDto): Promise<ListResultDto<Dish>> {
+  async findAll(query: FindAllDishQueryDto): Promise<ListResultDto<Dish>> {
     const [result, totalCount] = await this.dishRepository.findAndCount({ ...query.toSQL() });
     return { result, totalCount };
   }

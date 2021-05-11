@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
+import { Public } from '../../common/decorators/public.decorator';
 import { IdParamDto } from '../../common/dto/id-param.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
 import { DishService } from './dish.service';
@@ -18,11 +19,13 @@ export class DishController {
   }
 
   @Get()
+  @Public()
   findAll(@Query() query: FindAllDishQueryDto): Promise<ListResultDto<Dish>> {
     return this.dishService.findAll(query);
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param() idParamDto: IdParamDto): Promise<Dish> {
     return this.dishService.findOne(idParamDto.id);
   }

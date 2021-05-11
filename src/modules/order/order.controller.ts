@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
+import { Public } from '../../common/decorators/public.decorator';
 import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
 import { IdParamDto } from '../../common/dto/id-param.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
@@ -12,7 +13,9 @@ import { OrderService } from './order.service';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+  //TODO make it work only after payment
   @Post()
+  @Public()
   create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return this.orderService.create(createOrderDto);
   }

@@ -6,8 +6,12 @@ import { OrderDish } from './order-dish.dto';
 export class CreateOrderDto {
   @IsOptional()
   @IsString()
-  @Length(1, 4096)
+  @Length(0, 4096)
   notes?: string;
+
+  @IsDefined()
+  @IsString()
+  email!: string;
 
   @IsDefined()
   @ValidateNested({ each: true })

@@ -45,6 +45,8 @@ export class OrderService {
       return acc + dish.price * orderDish.amount;
     }, 0);
 
+    console.log('Customer email: ', createOrderDto.email);
+
     const order = await this.orderRepository.save({
       code: code,
       notes: createOrderDto.notes,

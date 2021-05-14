@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { Public } from '../../common/decorators/public.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
 import { IdParamDto } from '../../common/dto/id-param.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
+import { RoleEnum } from '../role/enums/role.enum';
 import { DishService } from './dish.service';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { FindAllDishQueryDto } from './dto/find-all-dish-query.dto';
@@ -14,6 +16,7 @@ export class DishController {
   constructor(private readonly dishService: DishService) {}
 
   @Post()
+  @Roles(RoleEnum.admin)
   create(@Body() createDishDto: CreateDishDto): Promise<Dish> {
     return this.dishService.create(createDishDto);
   }

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
+import { Public } from '../../common/decorators/public.decorator';
 import { FindAllNamedQueryDto } from '../../common/dto/find-all-named-query.dto';
 import { IdParamDto } from '../../common/dto/id-param.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
@@ -23,6 +24,7 @@ export class MenuController {
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param() idParamDto: IdParamDto): Promise<Menu> {
     return this.menuService.findOne(idParamDto.id);
   }

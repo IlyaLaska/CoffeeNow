@@ -27,7 +27,7 @@ export class MenuService {
   }
 
   async findOne(id: number): Promise<Menu> {
-    const menu = await this.menuRepository.findOne(id);
+    const menu = await this.menuRepository.findOne(id, { relations: ['dishes'] });
     if (!menu) {
       throw new NotFoundException('Menu not found');
     }

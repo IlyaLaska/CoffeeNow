@@ -30,8 +30,8 @@ export class ConfigService {
     return this.envVariables.PORT;
   }
 
-  get HOSTNAME(): string | undefined {
-    return this.envVariables.HOSTNAME;
+  get HOST(): string | undefined {
+    return this.envVariables.HOST;
   }
 
   get FIREBASE_ADMIN_CREDENTIALS(): string {
@@ -54,6 +54,14 @@ export class ConfigService {
 
   get initEnabled(): boolean {
     return !!this.envVariables.ADMIN_INIT_ENABLED;
+  }
+
+  get MAIL_PASS(): string {
+    return this.envVariables.MAIL_PASS;
+  }
+
+  get MAIL_ADDRESS(): string {
+    return this.envVariables.MAIL_ADDRESS;
   }
 
   get ormConfig(): TypeOrmModuleOptions {

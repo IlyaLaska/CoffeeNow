@@ -30,7 +30,7 @@ export class EnvVariables implements Readonly<EnvVariables> {
 
   @IsOptional()
   @IsString()
-  HOSTNAME?: string;
+  HOST?: string;
 
   @IsDefined()
   @IsNotEmpty()
@@ -125,4 +125,14 @@ export class EnvVariables implements Readonly<EnvVariables> {
   @Type(() => Boolean)
   @IsBoolean()
   REDIS_TLS?: boolean;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  MAIL_PASS!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsEmail()
+  MAIL_ADDRESS!: string;
 }

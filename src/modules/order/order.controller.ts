@@ -4,6 +4,7 @@ import { Public } from '../../common/decorators/public.decorator';
 import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
 import { IdParamDto } from '../../common/dto/id-param.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
+import { CodeParamDto } from './dto/code-param.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -13,11 +14,16 @@ import { OrderService } from './order.service';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  //TODO make it work only after payment
   @Post()
   @Public()
   create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
     return this.orderService.create(createOrderDto);
+  }
+
+  @Post('/confirm')
+  @Public()
+  paymentConfirm(@Body() msg: any): Promise<undefined> {
+    return this.orderService.paymentConfirm(msg);
   }
 
   @Get()
@@ -33,6 +39,11 @@ export class OrderController {
   @Get(':id')
   findOne(@Param() idParamDto: IdParamDto): Promise<Order> {
     return this.orderService.findOne(idParamDto.id);
+  }
+
+  @Get('/code/:code')
+  findOneByCode(@Param() codeParamDto: CodeParamDto): Promise<Order | undefined> {
+    return this.orderService.findByCode(codeParamDto.code);
   }
 
   @Put(':id')

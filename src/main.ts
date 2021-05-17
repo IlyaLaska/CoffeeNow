@@ -30,8 +30,9 @@ async function cors(app: INestApplication): Promise<void> {
 
 async function listen(app: INestApplication): Promise<void> {
   const configService = app.get(ConfigService);
-  if (configService.HOSTNAME) {
-    await app.listen(configService.PORT, configService.HOSTNAME);
+  if (configService.HOST) {
+    console.log(`Listening at ${configService.HOST}:${configService.PORT}`);
+    await app.listen(configService.PORT, configService.HOST);
   } else {
     await app.listen(configService.PORT);
   }

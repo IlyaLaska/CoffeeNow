@@ -6,6 +6,7 @@ import { ORDER_CODE_LEN } from '../../common/constants';
 import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
 import { DishService } from '../dish/dish.service';
+import { MailService } from '../mail/mail.service';
 import { OrderToDishService } from '../order-to-dish/order-to-dish.service';
 import { RandomService } from '../random/random.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -21,6 +22,7 @@ export class OrderService {
     private readonly randomService: RandomService,
     private readonly dishService: DishService,
     private readonly orderToDishService: OrderToDishService,
+    private readonly mailService: MailService,
   ) {}
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     // for (let i = 0; i < 10; i++) {
@@ -45,7 +47,8 @@ export class OrderService {
       return acc + dish.price * orderDish.amount;
     }, 0);
 
-    console.log('Customer email: ', createOrderDto.email);
+    // const res = await this.mailService.sendMail(createOrderDto.email, code);
+    // console.log('res: ', res);
 
     const order = await this.orderRepository.save({
       code: code,
@@ -83,7 +86,12 @@ export class OrderService {
   }
 
   async findByCode(code: string): Promise<Order | undefined> {
-    return await this.orderRepository.findOne({ where: { code: code, status: Not(OrderStatusEnum.completed) } });
+    console.log(code, code.toString());
+    const a = await this.orderRepository.findOne({
+      where: { code: code.toString(), status: Not(OrderStatusEnum.completed) },
+    });
+    console.log('res', a);
+    return a;
   }
 
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
@@ -97,5 +105,10 @@ export class OrderService {
   async remove(id: number): Promise<number | undefined | null> {
     const res = await this.orderRepository.delete(id);
     return res.affected;
+  }
+
+  paymentConfirm(msg: any): Promise<undefined> {
+    console.log(msg);
+    return Promise.resolve(undefined);
   }
 }

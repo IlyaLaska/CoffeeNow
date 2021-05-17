@@ -17,6 +17,7 @@ import { OrderToDishModule } from './modules/order-to-dish/order-to-dish.module'
 import { RandomModule } from './modules/random/random.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserModule } from './modules/user/user.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UserModule } from './modules/user/user.module';
     RoleModule,
     UserModule,
     FirebaseModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [

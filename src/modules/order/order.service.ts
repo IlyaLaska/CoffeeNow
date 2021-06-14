@@ -47,7 +47,7 @@ export class OrderService {
       return acc + dish.price * orderDish.amount;
     }, 0);
 
-    // const res = await this.mailService.sendMail(createOrderDto.email, code);
+    const res = await this.mailService.sendMail(createOrderDto.email, code);
     // console.log('res: ', res);
 
     const order = await this.orderRepository.save({
@@ -86,11 +86,11 @@ export class OrderService {
   }
 
   async findByCode(code: string): Promise<Order | undefined> {
-    console.log(code, code.toString());
+    // console.log(code, code.toString());
     const a = await this.orderRepository.findOne({
       where: { code: code.toString(), status: Not(OrderStatusEnum.completed) },
     });
-    console.log('res', a);
+    // console.log('res', a);
     return a;
   }
 
@@ -107,8 +107,16 @@ export class OrderService {
     return res.affected;
   }
 
-  paymentConfirm(msg: any): Promise<undefined> {
-    console.log(msg);
+  async paymentConfirm(msg: any): Promise<undefined> {
+    // console.log(msg);
+    const buf = Buffer.from(msg.data, 'base64');
+    const data = JSON.parse(buf.toString('ascii'));
+    // console.log(data);
+    const order = await this.findByCode(data.order_id);
+    // console.log(order);
+    if (order) {
+      await this.update(order.id, { status: OrderStatusEnum.inProgress });
+    }
     return Promise.resolve(undefined);
   }
 }

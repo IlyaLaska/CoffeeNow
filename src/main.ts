@@ -2,6 +2,7 @@ import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@n
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import fastifyMultipart from 'fastify-multipart';
 
 import { AppModule } from './app.module';
 import { ConfigService } from './common/modules/config/config.service';
@@ -40,6 +41,7 @@ async function listen(app: INestApplication): Promise<void> {
 
 async function bootstrap(): Promise<void> {
   const fastifyAdapter = new FastifyAdapter();
+  fastifyAdapter.register(fastifyMultipart);
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter);
   await pipes(app);
   await interceptors(app);

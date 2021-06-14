@@ -10,14 +10,15 @@ import { ConfigService } from './common/modules/config/config.service';
 import { FirebaseModule } from './common/modules/firebase/firebase.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DishModule } from './modules/dish/dish.module';
+import { ImageModule } from './modules/image/image.module';
 import { InitModule } from './modules/init/init.module';
+import { MailModule } from './modules/mail/mail.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { OrderModule } from './modules/order/order.module';
 import { OrderToDishModule } from './modules/order-to-dish/order-to-dish.module';
 import { RandomModule } from './modules/random/random.module';
 import { RoleModule } from './modules/role/role.module';
 import { UserModule } from './modules/user/user.module';
-import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { MailModule } from './modules/mail/mail.module';
     UserModule,
     FirebaseModule,
     MailModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [

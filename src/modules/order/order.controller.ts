@@ -42,6 +42,7 @@ export class OrderController {
   }
 
   @Get('/code/:code')
+  @Public()
   findOneByCode(@Param() codeParamDto: CodeParamDto): Promise<Order | undefined> {
     return this.orderService.findByCode(codeParamDto.code);
   }

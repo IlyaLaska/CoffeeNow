@@ -135,4 +135,39 @@ export class EnvVariables implements Readonly<EnvVariables> {
   @IsNotEmpty()
   @IsEmail()
   MAIL_ADDRESS!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_BUCKET!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_IMAGES_FOLDER!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_FILES_FOLDER!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_USER_ENDPOINT!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_SECRET_ACCESS_KEY!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_ACCESS_KEY_ID!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_ENDPOINT!: string;
 }

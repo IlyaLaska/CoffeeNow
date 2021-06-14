@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import * as Redis from 'ioredis';
 
+import { S3Config } from '../../constants';
 import { AdminCredentials } from '../../types/AdminCredentials';
 // import { S3Config } from '../../constants';
 import { EnvVariables } from './env-variables.class';
@@ -50,6 +51,28 @@ export class ConfigService {
       email: this.envVariables.ADMIN_EMAIL,
       password: this.envVariables.ADMIN_PASSWORD,
     };
+  }
+
+  get s3Config(): S3Config {
+    return {
+      accessKeyId: this.envVariables.S3_ACCESS_KEY_ID,
+      secretAccessKey: this.envVariables.S3_SECRET_ACCESS_KEY,
+      endpoint: this.envVariables.S3_ENDPOINT,
+      s3ForcePathStyle: true,
+      signatureVersion: 'v4',
+    };
+  }
+
+  get s3Bucket(): string {
+    return this.envVariables.S3_BUCKET;
+  }
+
+  get s3Endpoint(): string {
+    return this.envVariables.S3_USER_ENDPOINT;
+  }
+
+  get s3ImagesFolder(): string {
+    return `${this.envVariables.POSTGRES_DATABASE}/${this.envVariables.S3_IMAGES_FOLDER}`;
   }
 
   get initEnabled(): boolean {

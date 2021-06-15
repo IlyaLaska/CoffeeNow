@@ -134,14 +134,6 @@ export class ImageService {
     return { result, totalCount };
   }
 
-  async findOneEager(id: string): Promise<Image> {
-    const image = await this.imageRepository.findOne(id, { relations: ['figures', 'setToImages'] });
-    if (!image) {
-      throw new NotFoundException('Image not found');
-    }
-    return image;
-  }
-
   async findOneOnly(id: string): Promise<Image> {
     const image = await this.imageRepository.findOne(id);
     if (!image) {

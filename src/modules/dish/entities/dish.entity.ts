@@ -2,13 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
 
+import { Image } from '../../image/entities/image.entity';
 import { Menu } from '../../menu/entities/menu.entity';
 import { OrderToDish } from '../../order-to-dish/entities/order-to-dish.entity';
 
@@ -35,8 +38,9 @@ export class Dish {
   @OneToMany(() => OrderToDish, (orderToDish) => orderToDish.dish)
   orderToDish!: OrderToDish[];
 
-  // @OneToMany(() => Image, (image) => image.figure, { eager: true })
-  // images?: Image;
+  @OneToOne(() => Image, (image) => image.dish, { eager: true })
+  @JoinColumn()
+  image?: Image;
 
   @UpdateDateColumn()
   updateDate!: Date;

@@ -110,7 +110,7 @@ export class OrderService {
   async paymentConfirm(msg: any): Promise<undefined> {
     // console.log(msg);
     const buf = Buffer.from(msg.data, 'base64');
-    const data = JSON.parse(buf.toString('ascii'));
+    const data = JSON.parse(buf.toString('utf8'));
     // console.log(data);
     const order = await this.findByCode(data.order_id);
     // console.log(order);

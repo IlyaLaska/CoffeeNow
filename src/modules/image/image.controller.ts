@@ -1,6 +1,7 @@
 import { BadRequestException, Controller, Delete, Get, Param, Post, Query, Req } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
 
+import { Public } from '../../common/decorators/public.decorator';
 import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
 import { ListResultDto } from '../../common/dto/list-result.dto';
 import { UuidParamDto } from '../../common/dto/uuid-param.dto';
@@ -11,6 +12,7 @@ import { ImageService } from './image.service';
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
+  @Public()
   @Post()
   async upload(@Req() req: FastifyRequest): Promise<Image> {
     if (!req.isMultipart()) {
@@ -30,7 +32,7 @@ export class ImageController {
 
   @Get(':id')
   findOne(@Param() uuidParamDto: UuidParamDto): Promise<Image> {
-    return this.imageService.findOneEager(uuidParamDto.id);
+    return this.imageService.findOneOnly(uuidParamDto.id);
   }
 
   @Delete(':id')

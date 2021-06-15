@@ -3,10 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+
+import { Dish } from '../../dish/entities/dish.entity';
 
 @Entity()
 export class Image {
@@ -24,6 +27,9 @@ export class Image {
 
   @Column({ length: 512 })
   location!: string;
+
+  @OneToOne(() => Dish, (dish) => dish.image)
+  dish?: Dish[];
 
   @Column('simple-array', { default: '' })
   scales!: string[];

@@ -19,5 +19,10 @@ export class CreateDishDto {
   @IsDefined()
   @IsString()
   @Length(1, 128)
+  imageId!: string;
+
+  @IsDefined()
+  @IsString()
+  @Length(1, 128)
   category!: string;
 }

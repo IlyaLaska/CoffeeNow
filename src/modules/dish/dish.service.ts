@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 
 import { ListResultDto } from '../../common/dto/list-result.dto';
+import { ImageService } from '../image/image.service';
 import { CreateDishDto } from './dto/create-dish.dto';
 import { FindAllDishQueryDto } from './dto/find-all-dish-query.dto';
 import { UpdateDishDto } from './dto/update-dish.dto';
@@ -13,9 +14,14 @@ export class DishService {
   constructor(
     @InjectRepository(Dish)
     private readonly dishRepository: Repository<Dish>,
+    private readonly imageService: ImageService,
   ) {}
   async create(createDishDto: CreateDishDto): Promise<Dish> {
-    return this.dishRepository.save(createDishDto);
+    const image = await this.imageService.findOneOnly(createDishDto.imageId);
+    return this.dishRepository.save({
+      ...createDishDto,
+      image,
+    });
   }
 
   async findAll(query: FindAllDishQueryDto): Promise<ListResultDto<Dish>> {

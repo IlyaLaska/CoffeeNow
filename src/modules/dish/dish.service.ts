@@ -48,9 +48,11 @@ export class DishService {
   async update(id: number, updateDishDto: UpdateDishDto): Promise<Dish> {
     // await this.dishRepository.update(id, updateDishDto);
     // return this.findOne(id);
+    const image = updateDishDto.imageId ? await this.imageService.findOneOnly(updateDishDto.imageId) : undefined;
     await this.dishRepository.save({
       id,
       ...updateDishDto,
+      image,
     });
     return await this.findOne(id);
   }

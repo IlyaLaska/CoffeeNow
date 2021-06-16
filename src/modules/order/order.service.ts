@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { In, Not, Repository } from 'typeorm';
 
 import { ORDER_CODE_LEN } from '../../common/constants';
 import { FindAllQueryDto } from '../../common/dto/find-all-query.dto';
@@ -62,7 +62,7 @@ export class OrderService {
 
   async findAll(query: FindAllQueryDto): Promise<ListResultDto<Order>> {
     const [result, totalCount] = await this.orderRepository.findAndCount({
-      where: { status: Not(OrderStatusEnum.completed) },
+      where: { status: Not(In([OrderStatusEnum.completed, OrderStatusEnum.processing])) },
       relations: ['orderToDish', 'orderToDish.dish'],
       ...query.toSQL(),
     });

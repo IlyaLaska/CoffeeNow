@@ -1,6 +1,8 @@
 import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import fastifyMultipart from 'fastify-multipart';
 
 import { AppModule } from './app.module';
 import { ConfigService } from './common/modules/config/config.service';
@@ -19,10 +21,19 @@ async function interceptors(app: INestApplication): Promise<void> {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 }
 
+async function cors(app: INestApplication): Promise<void> {
+  const options: CorsOptions = {
+    origin: true,
+  };
+
+  app.enableCors(options);
+}
+
 async function listen(app: INestApplication): Promise<void> {
   const configService = app.get(ConfigService);
-  if (configService.HOSTNAME) {
-    await app.listen(configService.PORT, configService.HOSTNAME);
+  if (configService.HOST) {
+    console.log(`Listening at ${configService.HOST}:${configService.PORT}`);
+    await app.listen(configService.PORT, configService.HOST);
   } else {
     await app.listen(configService.PORT);
   }
@@ -30,9 +41,11 @@ async function listen(app: INestApplication): Promise<void> {
 
 async function bootstrap(): Promise<void> {
   const fastifyAdapter = new FastifyAdapter();
+  fastifyAdapter.register(fastifyMultipart);
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, fastifyAdapter);
   await pipes(app);
   await interceptors(app);
+  await cors(app);
   await listen(app);
 }
 

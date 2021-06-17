@@ -1,5 +1,17 @@
-import { Type } from 'class-transformer';
-import { IsBoolean, IsDefined, IsIn, IsInt, IsNotEmpty, IsOptional, IsString, Length, Max, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsDefined,
+  IsEmail,
+  IsIn,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class EnvVariables implements Readonly<EnvVariables> {
   @IsDefined()
@@ -18,7 +30,7 @@ export class EnvVariables implements Readonly<EnvVariables> {
 
   @IsOptional()
   @IsString()
-  HOSTNAME?: string;
+  HOST?: string;
 
   @IsDefined()
   @IsNotEmpty()
@@ -50,6 +62,31 @@ export class EnvVariables implements Readonly<EnvVariables> {
   @IsOptional()
   @IsString()
   POSTGRES_CA_CERT?: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  FIREBASE_ADMIN_CREDENTIALS!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  FIREBASE_API_KEY!: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsEmail()
+  ADMIN_EMAIL?: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  ADMIN_PASSWORD?: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @Transform((val) => ['1', 1, 'true', true].includes(val.value))
+  @IsBoolean()
+  ADMIN_INIT_ENABLED?: boolean;
 
   @IsOptional()
   @IsString()
@@ -88,4 +125,49 @@ export class EnvVariables implements Readonly<EnvVariables> {
   @Type(() => Boolean)
   @IsBoolean()
   REDIS_TLS?: boolean;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  MAIL_PASS!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsEmail()
+  MAIL_ADDRESS!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_BUCKET!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_IMAGES_FOLDER!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_FILES_FOLDER!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_USER_ENDPOINT!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_SECRET_ACCESS_KEY!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_ACCESS_KEY_ID!: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  @IsString()
+  S3_ENDPOINT!: string;
 }

@@ -22,7 +22,7 @@ export class MenuController {
   }
 
   @Get()
-  @Roles(RoleEnum.admin)
+  @Public()
   findAll(@Query() query: FindAllNamedQueryDto): Promise<ListResultDto<Menu>> {
     return this.menuService.findAll(query);
   }

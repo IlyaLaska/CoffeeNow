@@ -34,11 +34,13 @@ export class DishController {
   }
 
   @Put(':id')
+  @Roles(RoleEnum.admin)
   update(@Param() idParamDto: IdParamDto, @Body() updateDishDto: UpdateDishDto): Promise<Dish> {
     return this.dishService.update(idParamDto.id, updateDishDto);
   }
 
   @Delete(':id')
+  @Roles(RoleEnum.admin)
   remove(@Param() idParamDto: IdParamDto): Promise<number | undefined | null> {
     return this.dishService.remove(idParamDto.id);
   }

@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { FastifyRequest } from 'fastify';
 
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { ROLES_KEY } from '../decorators/roles.decorator';
 import { ConfigService } from '../modules/config/config.service';
 import { FirebaseService } from '../modules/firebase/firebase.service';
 import { FirebaseTokenUserData } from '../types/FirebaseTokenUserData';
@@ -35,8 +36,8 @@ export class FirebaseGuard implements CanActivate {
     }
   }
 
-  private isAdmin(keys: string[], resourceId: string): boolean {
-    return keys?.some((key) => key === resourceId);
+  private checkRoles(keys: string[], roles: string[]): boolean {
+    return roles.some((role) => keys.includes(role));
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -47,11 +48,10 @@ export class FirebaseGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
+    const roles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
     const request = context.switchToHttp().getRequest();
     const token = await this.getToken(request);
     console.log(token);
-    return true;
-    // TODO Fix
-    // return this.isAdmin(token.keys, this.configService.RESOURCE_ID);
+    return this.checkRoles(token.keys, roles);
   }
 }
